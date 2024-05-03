@@ -1,12 +1,11 @@
 'use client'
 import {setDoc, collection, Firestore, doc, getDoc} from 'firebase/firestore';
-
+import {db} from './init';
 /**
  * firebase 新增資料
- * @param {Firestore} db Firestore Database
  * @alias 文件 https://firebase.google.com/docs/firestore/manage-data/add-data?hl=zh-tw
  */
-export async function addData (db: Firestore) {
+export async function addData () {
     const citiesRef = collection(db, "cities");
     // example
     await setDoc(doc(citiesRef, "SF"), {
@@ -33,10 +32,9 @@ export async function addData (db: Firestore) {
 
 /**
  * firebase 取得資料
- * @param {Firestore} db Firestore Database
  * @alias 文件 https://firebase.google.com/docs/firestore/query-data/get-data?hl=zh-tw
  */
-export async function getData (db: Firestore) {
+export async function getData () {
     // example
     const docRef = doc(db, "cities", "SF");
     const docSnap = await getDoc(docRef);
