@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import {AlertProvider} from '@/components/provider/alert-provider';
+import {AuthProvider, AlertProvider} from '@/components/provider';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AlertProvider>
-              <main className="flex min-h-screen flex-col items-center justify-center p-24 gap-4">
-                  {children}
-              </main>
-        </AlertProvider>
+        <AuthProvider>
+            <AlertProvider>
+                  <main className="flex min-h-screen flex-col items-center justify-center p-24 gap-4">
+                      {children}
+                  </main>
+            </AlertProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,40 +1,40 @@
 'use client'
-import {setDoc, collection, Firestore, doc, getDoc} from 'firebase/firestore';
+import {setDoc, collection, doc, getDoc, addDoc} from 'firebase/firestore';
 import {db} from './init';
+
+
+type UserData = {
+    displayName: string,
+    city: string,
+    district: string,
+    address: string,
+    phone: string,
+}
 /**
  * firebase 新增資料
  * @alias 文件 https://firebase.google.com/docs/firestore/manage-data/add-data?hl=zh-tw
  */
-export async function addData () {
-    const citiesRef = collection(db, "cities");
-    // example
-    await setDoc(doc(citiesRef, "SF"), {
-        name: "San Francisco", state: "CA", country: "USA",
-        capital: false, population: 860000,
-        regions: ["west_coast", "norcal"] });
-    await setDoc(doc(citiesRef, "LA"), {
-        name: "Los Angeles", state: "CA", country: "USA",
-        capital: false, population: 3900000,
-        regions: ["west_coast", "socal"] });
-    await setDoc(doc(citiesRef, "DC"), {
-        name: "Washington, D.C.", state: null, country: "USA",
-        capital: true, population: 680000,
-        regions: ["east_coast"] });
-    await setDoc(doc(citiesRef, "TOK"), {
-        name: "Tokyo", state: null, country: "Japan",
-        capital: true, population: 9000000,
-        regions: ["kanto", "honshu"] });
-    await setDoc(doc(citiesRef, "BJ"), {
-        name: "Beijing", state: null, country: "China",
-        capital: true, population: 21500000,
-        regions: ["jingjinji", "hebei"] });
+export async function addUserData ({
+   displayName,
+   city,
+   district,
+   address,
+   phone,
+}: UserData, uid: string) {
+    await setDoc(doc(db, "users", uid), {
+        displayName,
+        city,
+        district,
+        address,
+        phone,
+    });
 }
 
 /**
  * firebase 取得資料
  * @alias 文件 https://firebase.google.com/docs/firestore/query-data/get-data?hl=zh-tw
  */
-export async function getData () {
+export async function getUserData () {
     // example
     const docRef = doc(db, "cities", "SF");
     const docSnap = await getDoc(docRef);
@@ -48,6 +48,6 @@ export async function getData () {
 }
 
 export const crud = {
-    addData,
-    getData
+    addUserData,
+    getUserData
 }

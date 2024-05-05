@@ -1,5 +1,5 @@
 'use client'
-import {AlertContext} from '@/components/provider/alert-provider';
+import {AlertContext} from '@/components/provider';
 import {Dialog} from '@/components/ui/alert-dialog';
 import {useContext} from 'react';
 

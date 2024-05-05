@@ -1,77 +1,21 @@
 'use client'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {useContext, useState} from 'react';
-import {auth} from '@/lib/firebase';
-import {AlertContext} from '@/components/provider/alert-provider';
-import {errorCodeConfig, ErrorCodeEnum} from '@/lib/firebase/config';
-import {z} from 'zod';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
+import {getCity} from '@/lib/utils';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {useRegisterForm} from '@/app/register/hooks';
 
-const formSchema = z.object({
-    displayName: z.string().min(2, {
-        message: '店家名字至少需要兩個字吧！',
-    }),
-    email: z.string().email("請輸入 Email"),
-    password: z.string().min(1, {
-        message: "忘記打密碼了啦！",
-    }),
-})
 
 export default function RegisterForm() {
-    const {handleUpdateMessage} = useContext(AlertContext);
-    const [isPending, setIsPending] = useState(false);
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            displayName: "",
-            email: "",
-            password: "",
-        },
-    })
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        setIsPending(true);
-        const createUserPromise = auth.createUser(values.email, values.password);
-        createUserPromise.then((userCredential) => {
-            auth.updateDisplayName(values.displayName)
-                .then(() => {
-                    console.log('Profile updated!');
-                })
-                .catch((error) => {
-                    handleUpdateMessage({
-                        title: error.code,
-                        desc: error.message,
-                    })
-                })
-            handleUpdateMessage({
-                title: "註冊成功",
-                desc: `${userCredential.user.email} 已註冊成功！`,
-            })
-        })
-            .catch((error) => {
-                handleUpdateMessage({
-                    title: "註冊失敗",
-                    desc: errorCodeConfig[error.code as ErrorCodeEnum] ?? error.code,
-                })
-            })
-            .finally(() => {
-                setIsPending(false);
-            })
-    }
+    const {cities, getDistricts} = getCity();
+    const {form, onSubmit, isDisabled} = useRegisterForm();
+
     return (
         <>
-            <Card className="mx-auto max-w-sm">
+            <Card className="mx-auto max-w-sm w-full">
                 <CardHeader>
                     <CardTitle className="text-2xl">註冊</CardTitle>
                     <CardDescription>
@@ -100,6 +44,84 @@ export default function RegisterForm() {
                             />
                             <FormField
                                 control={form.control}
+                                name="city"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>註冊你的商家縣市</FormLabel>
+                                        <FormControl>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="請選擇縣市" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {cities.map((c, i) => <SelectItem key={i} value={c}>{c}</SelectItem>)}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="district"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>註冊你的商家區域</FormLabel>
+                                        <FormControl>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="請選擇區域" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {getDistricts(form.getValues("city")).map((c, i) => <SelectItem key={i} value={c.name}>{c.name}</SelectItem>)}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="address"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>註冊你的商家地址</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="請輸入商家區域"
+                                                type="text"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phone"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>註冊你的聯絡電話</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="請輸入聯絡電話"
+                                                type="text"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
@@ -107,7 +129,7 @@ export default function RegisterForm() {
                                         <FormControl>
                                             <Input
                                                 placeholder="請輸入信箱"
-                                                type="email"
+                                                type="phone"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -132,7 +154,7 @@ export default function RegisterForm() {
                                     </FormItem>
                                 )}
                             />
-                            <Button disabled={!form.formState.isValid || isPending} type="submit">立馬註冊</Button>
+                            <Button disabled={isDisabled} type="submit">立馬註冊</Button>
                         </form>
                     </Form>
                     <div className="mt-4 text-center text-sm">

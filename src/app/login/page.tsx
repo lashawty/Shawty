@@ -22,9 +22,10 @@ import {
 import { Input } from "@/components/ui/input"
 import {useContext, useState} from 'react';
 import {auth} from '@/lib/firebase';
-import {AlertContext} from '@/components/provider/alert-provider';
 import {errorCodeConfig, ErrorCodeEnum} from '@/lib/firebase/config';
 import {Label} from '@/components/ui/label';
+import {AuthContext, AlertContext} from '@/components/provider';
+import {useRouter} from 'next/navigation';
 
 const formSchema = z.object({
     email: z.string().email("請輸入 Email"),
@@ -35,6 +36,8 @@ const formSchema = z.object({
 
 export default function LoginForm() {
     const [isPending, setIsPending] = useState(false);
+    const {handleUpdateMessage} = useContext(AlertContext);
+    const {handleUpdateAuthInfo} = useContext(AuthContext);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -42,16 +45,25 @@ export default function LoginForm() {
             password: "",
         },
     })
+    const router = useRouter();
+
     function onSubmit(values: z.infer<typeof formSchema>) {
         setIsPending(true);
         const signInPromise = auth.signIn(values.email, values.password);
         signInPromise
             .then((userCredential) => {
-                console.log(userCredential);
+                handleUpdateAuthInfo({
+                    isAuth: true,
+                    //@ts-ignore
+                    displayName: userCredential.user.displayName,
+                    //@ts-ignore
+                    token: userCredential.user.accessToken,
+                })
                 handleUpdateMessage({
                     title: "登入成功",
                     desc: "你已登入成功！",
                 })
+                router.push('/dashboard');
             })
             .catch((error) => {
                 handleUpdateMessage({
@@ -64,7 +76,7 @@ export default function LoginForm() {
             })
     }
 
-    const {handleUpdateMessage} = useContext(AlertContext);
+
 
     const handleForgetPassword = () => {
         handleUpdateMessage({
