@@ -1,11 +1,15 @@
 import {useContext, useState} from 'react';
-import {useForm} from 'react-hook-form';
+import {ControllerRenderProps, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {getCity} from '@/lib/utils';
 import {auth, crud} from '@/lib/firebase';
 import {errorCodeConfig, ErrorCodeEnum} from '@/lib/firebase/config';
 import {AlertContext, AuthContext} from '@/components/provider';
+
+export type Name = "displayName" | "city" | "district" | "address" | "phone" | "email" | "password"
+
+export type FormField = ControllerRenderProps<z.infer<any>, Name>;
 
 const formSchema = z.object({
     displayName: z.string().min(2, {

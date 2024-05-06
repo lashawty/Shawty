@@ -6,12 +6,86 @@ import { Input } from "@/components/ui/input"
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
 import {getCity} from '@/lib/utils';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import {useRegisterForm} from '@/app/register/hooks';
+import {useRegisterForm, type Name, type FormField} from '@/app/register/hooks';
+import { HTMLInputTypeAttribute } from "react"
+import { ControllerRenderProps } from "react-hook-form"
+
+type Option = {
+    value: string,
+    label: string,
+}
+
+
+type Field = {
+    name: Name,
+    label: string,
+    placeholder: string,
+    type?: HTMLInputTypeAttribute,
+    options?: Option[],
+}
 
 
 export default function RegisterForm() {
     const {cities, getDistricts} = getCity();
     const {form, onSubmit, isDisabled} = useRegisterForm();
+    const cityOptions: Option[] = cities.map((city) => {
+        return {
+            value: city,
+            label: city,
+        }}
+    );
+    const districtOptions: Option[] = getDistricts(form.getValues("city")).map((dist) => {
+        return {
+            value: dist.zip,
+            label: dist.name,
+        }
+    })
+    const fields: Field[] = [
+        {
+            name: 'displayName',
+            label: '商家名字',
+            placeholder: '請輸入商家名字',
+            type: 'text',
+        },
+        {
+            name: 'city',
+            label: '商家縣市',
+            placeholder: '請選擇縣市',
+            type: 'select',
+            options: cityOptions,
+        },
+        {
+            name: 'district',
+            label: '商家行政區',
+            placeholder: '請選擇行政區',
+            type: 'select',
+            options: districtOptions,
+        },
+        {
+            name: 'address',
+            label: '商家地址',
+            placeholder: '請輸入商家地址',
+            type: 'text',
+        },
+        {
+            name: 'phone',
+            label: '連絡電話',
+            placeholder: '請輸入連絡電話',
+            type: 'phone',
+        },
+        {
+            name: 'email',
+            label: '註冊帳號',
+            placeholder: '請輸入電子信箱',
+            type: 'email',
+        },
+        {
+            name: 'password',
+            label: '趕快想一組神秘的密碼',
+            placeholder: '請輸入密碼',
+            type: 'password',
+        },
+    ];
 
     return (
         <>
@@ -25,135 +99,53 @@ export default function RegisterForm() {
                 <CardContent>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between items-center gap-5">
-                            <FormField
-                                control={form.control}
-                                name="displayName"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>註冊你的商家名字</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="請輸入商家名字"
-                                                type="text"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="city"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>註冊你的商家縣市</FormLabel>
-                                        <FormControl>
+                            {
+                                fields.map((row, index) => {
+                                    const renderSelect = (field: FormField) => {
+                                        return (
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="請選擇縣市" />
+                                                        <SelectValue placeholder={row.placeholder} />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    {cities.map((c, i) => <SelectItem key={i} value={c}>{c}</SelectItem>)}
+                                                    {row.options && row.options.map((opt, i) => <SelectItem key={i} value={opt.value}>{opt.label}</SelectItem>)}
                                                 </SelectContent>
                                             </Select>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="district"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>註冊你的商家區域</FormLabel>
-                                        <FormControl>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="請選擇區域" />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    {getDistricts(form.getValues("city")).map((c, i) => <SelectItem key={i} value={c.name}>{c.name}</SelectItem>)}
-                                                </SelectContent>
-                                            </Select>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="address"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>註冊你的商家地址</FormLabel>
-                                        <FormControl>
+                                        )
+                                    };
+
+                                    const renderInput = (field: FormField) => {
+                                        return (
                                             <Input
-                                                placeholder="請輸入商家區域"
-                                                type="text"
+                                                placeholder={row.placeholder}
+                                                type={row.type}
                                                 {...field}
                                             />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="phone"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>註冊你的聯絡電話</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="請輸入聯絡電話"
-                                                type="text"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>註冊你的幸運信箱</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="請輸入信箱"
-                                                type="phone"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>趕快想一組神秘的密碼</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="請輸入密碼"
-                                                type="password"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                                        )
+                                    }
+
+                                    const isSelect = row.type === 'select';
+
+                                    return (
+                                        <FormField
+                                            key={index}
+                                            control={form.control}
+                                            name={row.name}
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>{row.label}</FormLabel>
+                                                    <FormControl>
+                                                        {isSelect ? renderSelect(field) : renderInput(field)}
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    )
+                                })
+                            }
                             <Button disabled={isDisabled} type="submit">立馬註冊</Button>
                         </form>
                     </Form>
