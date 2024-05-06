@@ -1,5 +1,12 @@
 'use client'
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from 'firebase/auth';
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile,
+    onAuthStateChanged,
+    signOut as firebaseSignOut,
+} from 'firebase/auth';
 import {app} from './init';
 
 const authed = getAuth(app);
@@ -26,9 +33,42 @@ function updateDisplayName (displayName: string) {
         // photoURL: "https://example.com/jane-q-user/profile.jpg"
     })
 }
+export type AuthInfo = {
+    displayName: string | null,
+    uid: string | null,
+    email: string | null,
+    photoUrl: string | null,
+    phoneNumber: string | null,
+}
+
+function getAuthState (onLogin: (info: AuthInfo) => void, onLogout = () => {}) {
+    onAuthStateChanged(authed, (user) => {
+            if (user) {
+                onLogin({
+                    displayName: user.displayName,
+                    uid: user.uid,
+                    email: user.email,
+                    photoUrl: user.photoURL,
+                    phoneNumber: user.phoneNumber,
+                })
+                localStorage.setItem("isAuth", "true");
+                return;
+            }
+    });
+
+    localStorage.setItem("isAuth", "false");
+    onLogout();
+}
+
+function signOut () {
+    firebaseSignOut(authed);
+    localStorage.setItem("isAuth", "false");
+}
 
 export const auth = {
     createUser,
     signIn,
     updateDisplayName,
+    getAuthState,
+    signOut,
 };

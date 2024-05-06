@@ -1,6 +1,5 @@
 'use client'
-import {AuthContext} from '@/components/provider';
-import {useContext} from 'react';
+import {useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 
 export default function DashboardTemplate({
@@ -8,12 +7,13 @@ export default function DashboardTemplate({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const {isAuth} = useContext(AuthContext);
+    const isAuth = localStorage.getItem("isAuth") === "true";
     const router = useRouter();
-
-    if(!isAuth) {
-        router.push('/')
-    }
+    useEffect(() => {
+        if(!isAuth) {
+            router.push('/');
+        }
+    }, [isAuth])
 
     return (
         <>

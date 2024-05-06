@@ -6,9 +6,8 @@ import { Input } from "@/components/ui/input"
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
 import {getCity} from '@/lib/utils';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import {useRegisterForm, type Name, type FormField} from '@/app/register/hooks';
+import {useRegisterForm, type TName, type TFormField} from '@/app/register/hooks';
 import { HTMLInputTypeAttribute } from "react"
-import { ControllerRenderProps } from "react-hook-form"
 
 type Option = {
     value: string,
@@ -17,7 +16,7 @@ type Option = {
 
 
 type Field = {
-    name: Name,
+    name: TName,
     label: string,
     placeholder: string,
     type?: HTMLInputTypeAttribute,
@@ -101,7 +100,7 @@ export default function RegisterForm() {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between items-center gap-5">
                             {
                                 fields.map((row, index) => {
-                                    const renderSelect = (field: FormField) => {
+                                    const renderSelect = (field: TFormField) => {
                                         return (
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <FormControl>
@@ -116,7 +115,7 @@ export default function RegisterForm() {
                                         )
                                     };
 
-                                    const renderInput = (field: FormField) => {
+                                    const renderInput = (field: TFormField) => {
                                         return (
                                             <Input
                                                 placeholder={row.placeholder}

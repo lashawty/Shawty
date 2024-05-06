@@ -1,7 +1,8 @@
 'use client'
-import {AlertContext} from '@/components/provider';
+import {AlertContext, AuthContext} from '@/components/provider';
 import {Dialog} from '@/components/ui/alert-dialog';
-import {useContext} from 'react';
+import {useContext, useEffect} from 'react';
+import {auth} from '@/lib/firebase';
 
 export default function RootTemplate({
     children,
@@ -9,9 +10,14 @@ export default function RootTemplate({
     children: React.ReactNode;
 }>) {
     const alertContext = useContext(AlertContext);
+    const {handleUpdateAuthInfo} = useContext(AuthContext);
     const handleOnContinue = () => {
         alertContext.handleOpenDialog(false)
     }
+
+    useEffect(() => {
+        auth.getAuthState(handleUpdateAuthInfo);
+    }, [])
 
     return (
         <>

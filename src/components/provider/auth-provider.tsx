@@ -1,29 +1,29 @@
 "use client";
 import { createContext, ReactNode, useState } from "react";
+import {auth, AuthInfo} from '@/lib/firebase/auth';
 
-type AuthInfo = {
-    isAuth: boolean,
-    displayName: string,
-    token: string,
-}
 
-type HandleUpdateAuthInfo = (message: AuthInfo) => void
+type HandleUpdateAuthInfo = (info: AuthInfo) => void
 
 const defaultInfo: AuthInfo = {
-    isAuth: false,
-    displayName: '',
-    token: '',
-}
+    displayName: null,
+    uid: null,
+    email: null,
+    photoUrl: null,
+    phoneNumber: null,
+};
 
 
 type AuthContext = {
     handleUpdateAuthInfo: HandleUpdateAuthInfo;
+    handleSignOut: () => void;
 } & AuthInfo;
 
 
 const defaultValue: AuthContext = {
     ...defaultInfo,
     handleUpdateAuthInfo: () => {},
+    handleSignOut: () => {},
 };
 
 const AuthContext = createContext(defaultValue);
@@ -42,8 +42,13 @@ function AuthProvider({ children }: Props) {
         })
     }
 
+    const handleSignOut = () => {
+        auth.signOut();
+        handleUpdateAuthInfo(defaultInfo);
+    }
+
     return (
-        <AuthContext.Provider value={{...authInfo, handleUpdateAuthInfo}}>
+        <AuthContext.Provider value={{...authInfo, handleUpdateAuthInfo, handleSignOut}}>
             {children}
         </AuthContext.Provider>
     );

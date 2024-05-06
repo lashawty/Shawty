@@ -13,6 +13,8 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import {useContext} from 'react';
+import {AuthContext} from '@/components/provider';
 
 const formSchema = z.object({
     keyword: z.string().min(1, {
@@ -25,6 +27,9 @@ export default function Home() {
     const handleOnClick = (url: string) => {
         router.push(url);
     }
+    const authContext = useContext(AuthContext);
+    const isAuth = authContext.uid !== null;
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -39,7 +44,7 @@ export default function Home() {
         <div className="w-[500px]">
             <h1 className="text-center text-2xl font-bold">首頁</h1>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex justify-between items-center min-h-[100px]">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="min-h-[100px]">
                     <FormField
                         control={form.control}
                         name="keyword"
@@ -53,16 +58,30 @@ export default function Home() {
                             </FormItem>
                         )}
                     />
-                    <Button disabled={!form.formState.isValid} type="submit">Submit</Button>
+                    <Button className="mt-5" disabled={!form.formState.isValid} type="submit">搜尋店家</Button>
                 </form>
             </Form>
             <div className="flex justify-center gap-5 mt-[30px]">
-                <Button onClick={() => handleOnClick('/login')}>
-                    Login
-                </Button>
-                <Button onClick={() => handleOnClick('/register')}>
-                    Register
-                </Button>
+                {!isAuth && (
+                    <>
+                        <Button onClick={() => handleOnClick('/login')}>
+                            馬上登入
+                        </Button>
+                        <Button onClick={() => handleOnClick('/register')}>
+                            手刀註冊
+                        </Button>
+                    </>)
+                }
+                {isAuth && (
+                    <>
+                        <Button onClick={() => handleOnClick('/dashboard')}>
+                            後台管理
+                        </Button>
+                        <Button onClick={authContext.handleSignOut}>
+                            登出
+                        </Button>
+                    </>
+                )}
             </div>
         </div>
     )

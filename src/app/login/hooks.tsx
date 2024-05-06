@@ -2,8 +2,7 @@ import {useContext, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {getCity} from '@/lib/utils';
-import {auth, crud} from '@/lib/firebase';
+import {auth} from '@/lib/firebase';
 import {errorCodeConfig, ErrorCodeEnum} from '@/lib/firebase/config';
 import {AlertContext, AuthContext} from '@/components/provider';
 import { useRouter } from 'next/navigation';
@@ -33,13 +32,15 @@ export const useLoginForm = () => {
         const signInPromise = auth.signIn(values.email, values.password);
         signInPromise
             .then((userCredential) => {
+                const {photoURL, uid, displayName, email, phoneNumber} = userCredential.user;
                 handleUpdateAuthInfo({
-                    isAuth: true,
-                    //@ts-ignore
-                    displayName: userCredential.user.displayName,
-                    //@ts-ignore
-                    token: userCredential.user.accessToken,
+                    photoUrl: photoURL,
+                    displayName,
+                    uid,
+                    email,
+                    phoneNumber,
                 })
+                localStorage.setItem("isAuth", "true")
                 handleUpdateMessage({
                     title: "登入成功",
                     desc: "你已登入成功！",

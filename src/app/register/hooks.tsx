@@ -2,14 +2,14 @@ import {useContext, useState} from 'react';
 import {ControllerRenderProps, useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {getCity} from '@/lib/utils';
 import {auth, crud} from '@/lib/firebase';
 import {errorCodeConfig, ErrorCodeEnum} from '@/lib/firebase/config';
-import {AlertContext, AuthContext} from '@/components/provider';
+import {AlertContext} from '@/components/provider';
+import {useRouter} from 'next/navigation';
 
-export type Name = "displayName" | "city" | "district" | "address" | "phone" | "email" | "password"
+export type TName = "displayName" | "city" | "district" | "address" | "phone" | "email" | "password"
 
-export type FormField = ControllerRenderProps<z.infer<any>, Name>;
+export type TFormField = ControllerRenderProps<z.infer<any>, TName>;
 
 const formSchema = z.object({
     displayName: z.string().min(2, {
@@ -35,7 +35,7 @@ const formSchema = z.object({
 
 export const useRegisterForm = () => {
     const {handleUpdateMessage} = useContext(AlertContext);
-    const {handleUpdateAuthInfo} = useContext(AuthContext);
+    const router = useRouter();
     const [isPending, setIsPending] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -74,6 +74,7 @@ export const useRegisterForm = () => {
                 title: "註冊成功",
                 desc: `${userCredential.user.email} 已註冊成功！`,
             })
+            router.push('/login');
         })
             .catch((error) => {
                 handleUpdateMessage({
