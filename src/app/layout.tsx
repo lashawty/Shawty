@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import {Inter, Noto_Sans_TC} from 'next/font/google';
 import "./globals.css";
 import {AuthProvider, AlertProvider} from '@/components/provider';
 
-const inter = Inter({ subsets: ["latin"] });
+const notoSansTC = Noto_Sans_TC({weight: ['300', '500', '700'], subsets: ["latin"]})
 
 export const metadata: Metadata = {
   title: "SHAWTY",
@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={notoSansTC.className}>
         <AuthProvider>
             <AlertProvider>
                   <main className="flex min-h-screen flex-col items-center justify-center p-24 gap-4">

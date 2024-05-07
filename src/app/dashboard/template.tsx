@@ -9,11 +9,9 @@ export default function DashboardTemplate({
 }>) {
     const isAuth = localStorage.getItem("isAuth") === "true";
     const router = useRouter();
-    useEffect(() => {
-        if(!isAuth) {
-            router.push('/');
-        }
-    }, [isAuth])
+    if(!isAuth) {
+        router.push('/');
+    }
 
     return (
         <>
