@@ -8,6 +8,7 @@ import {getCity} from '@/lib/utils';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {useRegisterForm, type TName, type TFormField} from '@/app/register/hooks';
 import { HTMLInputTypeAttribute } from "react"
+import { useAuthRedirect } from "@/lib/hooks"
 
 type Option = {
     value: string,
@@ -25,6 +26,7 @@ type Field = {
 
 
 export default function RegisterForm() {
+    useAuthRedirect({auth: '/'});
     const {cities, getDistricts} = getCity();
     const {form, onSubmit, isDisabled} = useRegisterForm();
     const cityOptions: Option[] = cities.map((city) => {
@@ -87,8 +89,8 @@ export default function RegisterForm() {
     ];
 
     return (
-        <>
-            <Card className="mx-auto max-w-sm w-full">
+        <section className="flex h-screen items-center justify-center p-[20px]">
+            <Card className="mx-auto max-w-xl w-full">
                 <CardHeader>
                     <CardTitle className="text-2xl">註冊</CardTitle>
                     <CardDescription>
@@ -156,6 +158,6 @@ export default function RegisterForm() {
                     </div>
                 </CardContent>
             </Card>
-        </>
+        </section>
     )
 }

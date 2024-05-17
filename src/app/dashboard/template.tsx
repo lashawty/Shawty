@@ -1,18 +1,13 @@
 'use client'
-import {useEffect} from 'react';
-import {useRouter} from 'next/navigation';
+import {useAuthRedirect} from '@/lib/hooks';
 
 export default function DashboardTemplate({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const isAuth = localStorage.getItem("isAuth") === "true";
-    const router = useRouter();
-    if(!isAuth) {
-        router.push('/');
-    }
-
+    useAuthRedirect({notAuth: '/login'});
+    
     return (
         <>
             {children}

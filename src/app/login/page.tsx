@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import {Label} from '@/components/ui/label';
 import { useLoginForm } from "./hooks"
 import { HTMLInputTypeAttribute } from "react"
+import { useAuthRedirect } from "@/lib/hooks"
 
 type Field = {
     name: "email" | "password",
@@ -44,11 +45,12 @@ const fields: Field[] = [
 ];
 
 export default function LoginForm() {
+    useAuthRedirect({auth: '/'});
     const {form, handleForgetPassword, onSubmit, isDisabled} = useLoginForm();
     
     return (
-        <>
-            <Card className="mx-auto max-w-sm">
+        <section className="flex h-screen items-center justify-center p-[20px]">
+            <Card className="mx-auto max-w-xl w-full">
                 <CardHeader>
                     <CardTitle className="text-2xl">登入</CardTitle>
                     <CardDescription>
@@ -92,6 +94,6 @@ export default function LoginForm() {
                     </div>
                 </CardContent>
             </Card>
-        </>
+        </section>
     )
 }

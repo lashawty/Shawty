@@ -41,7 +41,7 @@ export default function Home() {
     }
 
     return (
-        <div className="w-[500px]">
+        <section className="flex flex-col h-screen items-center justify-center p-[20px]">
             <h1 className="text-center text-2xl font-bold">首頁</h1>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="min-h-[100px]">
@@ -58,7 +58,7 @@ export default function Home() {
                             </FormItem>
                         )}
                     />
-                    <Button className="mt-5" disabled={!form.formState.isValid} type="submit">搜尋店家</Button>
+                    <Button className="mt-5 mx-auto block" disabled={!form.formState.isValid} type="submit">搜尋店家</Button>
                 </form>
             </Form>
             <div className="flex justify-center gap-5 mt-[30px]">
@@ -74,7 +74,7 @@ export default function Home() {
                 }
                 {isAuth && (
                     <>
-                        <Button onClick={() => handleOnClick('/dashboard')}>
+                        <Button onClick={() => handleOnClick('/dashboard/info')}>
                             後台管理
                         </Button>
                         <Button onClick={authContext.handleSignOut}>
@@ -83,6 +83,6 @@ export default function Home() {
                     </>
                 )}
             </div>
-        </div>
+        </section>
     )
 }
