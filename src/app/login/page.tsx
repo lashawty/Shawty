@@ -19,8 +19,9 @@ import {
 import { Input } from "@/components/ui/input"
 import {Label} from '@/components/ui/label';
 import { useLoginForm } from "./hooks"
-import { HTMLInputTypeAttribute } from "react"
+import { HTMLInputTypeAttribute, useContext } from "react"
 import { useAuthRedirect } from "@/lib/hooks"
+import { AuthContext } from "@/components/provider"
 
 type Field = {
     name: "email" | "password",
@@ -45,7 +46,8 @@ const fields: Field[] = [
 ];
 
 export default function LoginForm() {
-    useAuthRedirect({auth: '/'});
+    const authContext = useContext(AuthContext);
+    useAuthRedirect({auth: '/'}, authContext.uid !== null);
     const {form, handleForgetPassword, onSubmit, isDisabled} = useLoginForm();
     
     return (

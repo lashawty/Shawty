@@ -1,5 +1,7 @@
+'use client'
+
 import Link from "next/link"
-import { CircleUser, Menu, Package2, Search } from "lucide-react"
+import { CircleUser, Menu, TreePalm } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -9,25 +11,71 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { AuthContext } from "../provider"
+import { useContext } from "react"
 
 export function Nav() {
+  const authContext = useContext(AuthContext);
+  const isAuth = !!authContext.uid;
+
+  const renderAuthButtons = () => {
+    if (isAuth) {
+      return (
+        <>
+          <DropdownMenuLabel>會員中心</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Link
+              href="/dashboard"
+              className="text-muted-foreground transition-colors hover:text-foreground w-full"
+            >
+              後臺管理
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem 
+            className="cursor-pointer" 
+            onClick={authContext.handleSignOut}>
+              含淚登出
+          </DropdownMenuItem>
+        </>
+      )
+    }
+
+    return (
+      <>
+          <DropdownMenuItem>
+            <Link
+              href="/login"
+              className="text-muted-foreground transition-colors hover:text-foreground w-full"
+            >
+              立馬登入
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Link
+              href="register"
+              className="text-muted-foreground transition-colors hover:text-foreground w-full"
+            >
+              馬上加入
+            </Link>
+          </DropdownMenuItem>
+        </>
+    )
+  }
+
+
   return (
-    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 flex h-16 items-center gap-4 bg-background px-4 md:px-6 bg-slate-800 ">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             href="/"
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
-            <Package2 className="h-6 w-6" />
+            <TreePalm className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
-          </Link>
-          <Link
-            href="/dashboard/info"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Info
           </Link>
         </nav>
         <Sheet>
@@ -47,7 +95,7 @@ export function Nav() {
                 href="#"
                 className="flex items-center gap-2 text-lg font-semibold"
               >
-                <Package2 className="h-6 w-6" />
+                <TreePalm className="h-6 w-6" />
                 <span className="sr-only">Acme Inc</span>
               </Link>
               <Link
@@ -80,17 +128,7 @@ export function Nav() {
             </nav>
           </SheetContent>
         </Sheet>
-        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="ml-auto flex-1 sm:flex-initial">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
-          </form>
+        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4 justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
@@ -99,12 +137,7 @@ export function Nav() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              {renderAuthButtons()}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

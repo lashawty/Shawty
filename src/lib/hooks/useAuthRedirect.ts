@@ -7,8 +7,7 @@ type Url = {
     notAuth?: Path, 
 }
 
-export const useAuthRedirect = (url: Url = {}) => {
-    const isAuth = localStorage.getItem("isAuth") === "true";
+export const useAuthRedirect = (url: Url = {}, isAuth: boolean) => {
     const router = useRouter();
 
     if(!isAuth && url.notAuth) {
