@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
-import {getCity} from '@/lib/utils';
+import {City} from '@/lib/utils';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {useRegisterForm, type TName, type TFormField} from '@/app/register/hooks';
 import { HTMLInputTypeAttribute, useContext } from "react"
@@ -27,24 +27,11 @@ type Field = {
 
 
 export default function RegisterForm() {
-    const authContext = useContext(AuthContext);
-    const {cities, getDistricts} = getCity();
+    const {uid} = useContext(AuthContext);
     const {form, onSubmit, isDisabled} = useRegisterForm();
+    const districtOptions = City.getDistrictOptions(form.getValues("city"))
+    useAuthRedirect({auth: '/'}, !!uid);
     
-    useAuthRedirect({auth: '/'}, authContext.uid !== null);
-    
-    const cityOptions: Option[] = cities.map((city) => {
-        return {
-            value: city,
-            label: city,
-        }}
-    );
-    const districtOptions: Option[] = getDistricts(form.getValues("city")).map((dist) => {
-        return {
-            value: dist.zip,
-            label: dist.name,
-        }
-    })
     const fields: Field[] = [
         {
             name: 'displayName',
@@ -57,10 +44,10 @@ export default function RegisterForm() {
             label: '商家縣市',
             placeholder: '請選擇縣市',
             type: 'select',
-            options: cityOptions,
+            options: City.cityOptions,
         },
         {
-            name: 'district',
+            name: 'zip',
             label: '商家行政區',
             placeholder: '請選擇行政區',
             type: 'select',
@@ -73,7 +60,7 @@ export default function RegisterForm() {
             type: 'text',
         },
         {
-            name: 'phone',
+            name: 'phoneNumber',
             label: '連絡電話',
             placeholder: '請輸入連絡電話',
             type: 'phone',
@@ -108,7 +95,11 @@ export default function RegisterForm() {
                                 fields.map((row, index) => {
                                     const renderSelect = (field: TFormField) => {
                                         return (
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <Select 
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                disabled={field.disabled}
+                                            >
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder={row.placeholder} />

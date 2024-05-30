@@ -46,8 +46,9 @@ const fields: Field[] = [
 ];
 
 export default function LoginForm() {
-    const authContext = useContext(AuthContext);
-    useAuthRedirect({auth: '/'}, authContext.uid !== null);
+    const {uid} = useContext(AuthContext);
+    useAuthRedirect({auth: '/'}, !!uid);
+    
     const {form, handleForgetPassword, onSubmit, isDisabled} = useLoginForm();
     
     return (

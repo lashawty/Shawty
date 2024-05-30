@@ -8,6 +8,7 @@ import {
     signOut as firebaseSignOut,
 } from 'firebase/auth';
 import {app} from './init';
+import {crud} from './crud';
 
 const authed = getAuth(app);
 
@@ -39,30 +40,31 @@ export type AuthInfo = {
     email: string | null,
     photoUrl: string | null,
     phoneNumber: string | null,
+    zip?: string,
+    address?: string,
+    city?: string,
 }
 
 function getAuthState (onLogin: (info: AuthInfo) => void, onLogout = () => {}) {
     onAuthStateChanged(authed, (user) => {
             if (user) {
-                onLogin({
+                const data: AuthInfo = {
                     displayName: user.displayName,
                     uid: user.uid,
                     email: user.email,
                     photoUrl: user.photoURL,
                     phoneNumber: user.phoneNumber,
-                })
-                localStorage.setItem("isAuth", "true");
+                }
+                crud.getUserData(data, onLogin);
                 return;
             }
     });
 
-    localStorage.setItem("isAuth", "false");
     onLogout();
 }
 
 function signOut () {
     firebaseSignOut(authed);
-    localStorage.setItem("isAuth", "false");
 }
 
 export const auth = {

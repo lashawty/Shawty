@@ -40,7 +40,6 @@ export const useLoginForm = () => {
                     email,
                     phoneNumber,
                 })
-                localStorage.setItem("isAuth", "true")
                 handleUpdateMessage({
                     title: "登入成功",
                     desc: "你已登入成功！",

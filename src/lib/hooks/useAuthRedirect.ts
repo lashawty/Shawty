@@ -9,7 +9,7 @@ type Url = {
 
 export const useAuthRedirect = (url: Url = {}, isAuth: boolean) => {
     const router = useRouter();
-
+    
     if(!isAuth && url.notAuth) {
         router.push(url.notAuth);
     }

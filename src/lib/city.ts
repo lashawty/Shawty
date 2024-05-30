@@ -1,4 +1,13 @@
-export const cities = [
+type City = {
+  districts: {
+    zip: string,
+    name: string,
+  }[],
+  name: string,
+  code: string,
+}
+
+export const cities: City[] = [
   {
     "districts": [
       {
@@ -50,7 +59,8 @@ export const cities = [
         "name": "文山區"
       }
     ],
-    "name": "臺北市"
+    "name": "臺北市",
+    "code": "TPE",
   },
   {
     "districts": [
@@ -83,7 +93,8 @@ export const cities = [
         "name": "七堵區"
       }
     ],
-    "name": "基隆市"
+    "name": "基隆市",
+    "code": "KLU",
   },
   {
     "districts": [
@@ -204,7 +215,8 @@ export const cities = [
         "name": "石門區"
       }
     ],
-    "name": "新北市"
+    "name": "新北市",
+    "code": "TPH",
   },
   {
     "districts": [
@@ -261,7 +273,8 @@ export const cities = [
         "name": "釣魚臺"
       }
     ],
-    "name": "宜蘭縣"
+    "name": "宜蘭縣",
+    "code": "ILN",
   },
   {
     "districts": [
@@ -282,7 +295,8 @@ export const cities = [
         "name": "東引鄉"
       }
     ],
-    "name": "連江縣"
+    "name": "連江縣",
+    "code": "LNN",
   },
   {
     "districts": [
@@ -299,7 +313,8 @@ export const cities = [
         "name": "香山區"
       }
     ],
-    "name": "新竹市"
+    "name": "新竹市",
+    "code": "HSC",
   },
   {
     "districts": [
@@ -356,7 +371,8 @@ export const cities = [
         "name": "峨眉鄉"
       }
     ],
-    "name": "新竹縣"
+    "name": "新竹縣",
+    "code": "HSH",
   },
   {
     "districts": [
@@ -413,7 +429,8 @@ export const cities = [
         "name": "蘆竹區"
       }
     ],
-    "name": "桃園市"
+    "name": "桃園市",
+    "code": "TYC",
   },
   {
     "districts": [
@@ -490,7 +507,8 @@ export const cities = [
         "name": "卓蘭鎮"
       }
     ],
-    "name": "苗栗縣"
+    "name": "苗栗縣",
+    "code": "MAL",
   },
   {
     "districts": [
@@ -611,7 +629,8 @@ export const cities = [
         "name": "大安區"
       }
     ],
-    "name": "臺中市"
+    "name": "臺中市",
+    "code": "TXG",
   },
   {
     "districts": [
@@ -720,7 +739,8 @@ export const cities = [
         "name": "二水鄉"
       }
     ],
-    "name": "彰化縣"
+    "name": "彰化縣",
+    "code": "CWS",
   },
   {
     "districts": [
@@ -777,7 +797,8 @@ export const cities = [
         "name": "鹿谷鄉"
       }
     ],
-    "name": "南投縣"
+    "name": "南投縣",
+    "code": "NTO",
   },
   {
     "districts": [
@@ -790,7 +811,8 @@ export const cities = [
         "name": "東區"
       }
     ],
-    "name": "嘉義市"
+    "name": "嘉義市",
+    "code": "CYI",
   },
   {
     "districts": [
@@ -867,7 +889,8 @@ export const cities = [
         "name": "布袋鎮"
       }
     ],
-    "name": "嘉義縣"
+    "name": "嘉義縣",
+    "code": "CHY",
   },
   {
     "districts": [
@@ -952,7 +975,8 @@ export const cities = [
         "name": "元長鄉"
       }
     ],
-    "name": "雲林縣"
+    "name": "雲林縣",
+    "code": "YLH",
   },
   {
     "districts": [
@@ -1105,7 +1129,8 @@ export const cities = [
         "name": "安定區"
       }
     ],
-    "name": "臺南市"
+    "name": "臺南市",
+    "code": "TNN",
   },
   {
     "districts": [
@@ -1270,7 +1295,8 @@ export const cities = [
         "name": "茄萣區"
       }
     ],
-    "name": "高雄市"
+    "name": "高雄市",
+    "code": "KHH",
   },
   {
     "districts": [
@@ -1407,7 +1433,8 @@ export const cities = [
         "name": "滿州鄉"
       }
     ],
-    "name": "屏東縣"
+    "name": "屏東縣",
+    "code": "IUH",
   },
   {
     "districts": [
@@ -1476,7 +1503,8 @@ export const cities = [
         "name": "達仁鄉"
       }
     ],
-    "name": "臺東縣"
+    "name": "臺東縣",
+    "code": "TTT",
   },
   {
     "districts": [
@@ -1533,7 +1561,8 @@ export const cities = [
         "name": "富里鄉"
       }
     ],
-    "name": "花蓮縣"
+    "name": "花蓮縣",
+    "code": "HWA",
   },
   {
     "districts": [
@@ -1562,7 +1591,8 @@ export const cities = [
         "name": "湖西鄉"
       }
     ],
-    "name": "澎湖縣"
+    "name": "澎湖縣",
+    "code": "PEH",
   },
   {
     "districts": [
@@ -1591,6 +1621,7 @@ export const cities = [
         "name": "烏坵鄉"
       }
     ],
-    "name": "金門縣"
+    "name": "金門縣",
+    "code": "KMN",
   }
 ]

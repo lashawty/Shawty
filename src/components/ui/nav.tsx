@@ -18,7 +18,7 @@ import { useContext } from "react"
 export function Nav() {
   const authContext = useContext(AuthContext);
   const isAuth = !!authContext.uid;
-
+  
   const renderAuthButtons = () => {
     if (isAuth) {
       return (

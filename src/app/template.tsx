@@ -14,7 +14,7 @@ export default function RootTemplate({
     const handleOnContinue = () => {
         alertContext.handleOpenDialog(false)
     }
-
+    
     useEffect(() => {
         auth.getAuthState(handleUpdateAuthInfo);
     }, [])

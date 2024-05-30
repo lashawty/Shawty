@@ -7,7 +7,7 @@ import {errorCodeConfig, ErrorCodeEnum} from '@/lib/firebase/config';
 import {AlertContext} from '@/components/provider';
 import {useRouter} from 'next/navigation';
 
-export type TName = "displayName" | "city" | "district" | "address" | "phone" | "email" | "password"
+export type TName = "displayName" | "city" | "zip" | "address" | "phoneNumber" | "email" | "password"
 
 export type TFormField = ControllerRenderProps<z.infer<any>, TName>;
 
@@ -22,13 +22,13 @@ const formSchema = z.object({
     city: z.string().min(3, {
         message: "請輸入城市",
     }),
-    district: z.string().min(2, {
+    zip: z.string().min(3, {
         message: "請輸入區域",
     }),
     address: z.string().min(1, {
         message: "請輸入地址",
     }),
-    phone: z.string().min(10, {
+    phoneNumber: z.string().min(10, {
         message: "請輸入電話",
     }),
 })
@@ -43,15 +43,16 @@ export const useRegisterForm = () => {
             displayName: "",
             email: "",
             password: "",
-            city: "臺中市",
-            district: "北屯區",
+            city: "TXG",
+            zip: "406",
             address: ""
         },
     })
     const isDisabled = !form.formState.isValid || isPending;
+
     function onSubmit(values: z.infer<typeof formSchema>) {
         setIsPending(true);
-        const {email, password,displayName, district, address, city, phone} = values
+        const {email, password,displayName, zip, address, city, phoneNumber} = values
         const createUserPromise = auth.createUser(email, password);
         createUserPromise.then((userCredential) => {
             auth.updateDisplayName(displayName)
@@ -59,9 +60,9 @@ export const useRegisterForm = () => {
                     crud.addUserData({
                         displayName,
                         city,
-                        district,
+                        zip,
                         address,
-                        phone,
+                        phoneNumber,
                     }, userCredential.user.uid);
                 })
                 .catch((error) => {
