@@ -30,8 +30,6 @@ export default function RegisterForm() {
     const {uid} = useContext(AuthContext);
     const {form, onSubmit, isDisabled} = useRegisterForm();
     const districtOptions = City.getDistrictOptions(form.getValues("city"))
-    useAuthRedirect({auth: '/'}, !!uid);
-    
     const fields: Field[] = [
         {
             name: 'displayName',
@@ -78,6 +76,8 @@ export default function RegisterForm() {
             type: 'password',
         },
     ];
+
+    useAuthRedirect({auth: '/'}, !!uid);
 
     return (
         <section className="flex flex-1 items-center justify-center p-[20px]">

@@ -43,8 +43,11 @@ const formatAddress = ({cityCode, zip, address}: AddressConfig) => {
   return `${city}${district}${address}`
 }
 
+const formatCity = (cityCode: string) => cityOptions.find(row => row.value === cityCode)?.label;
+
 export const City = {
   cityOptions,
   getDistrictOptions,
-  formatAddress
+  formatAddress,
+  formatCity
 }

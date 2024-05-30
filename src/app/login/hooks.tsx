@@ -15,7 +15,6 @@ const formSchema = z.object({
 })
 
 export const useLoginForm = () => {
-    const router = useRouter();
     const {handleUpdateMessage} = useContext(AlertContext);
     const {handleUpdateAuthInfo} = useContext(AuthContext);
     const [isPending, setIsPending] = useState(false);
@@ -32,19 +31,18 @@ export const useLoginForm = () => {
         const signInPromise = auth.signIn(values.email, values.password);
         signInPromise
             .then((userCredential) => {
-                const {photoURL, uid, displayName, email, phoneNumber} = userCredential.user;
+                const {photoURL, uid, displayName, email} = userCredential.user;
+                
                 handleUpdateAuthInfo({
                     photoUrl: photoURL,
                     displayName,
                     uid,
                     email,
-                    phoneNumber,
                 })
                 handleUpdateMessage({
                     title: "登入成功",
                     desc: "你已登入成功！",
                 })
-                router.push('/dashboard');
             })
             .catch((error) => {
                 handleUpdateMessage({

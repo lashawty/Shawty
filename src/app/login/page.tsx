@@ -47,10 +47,11 @@ const fields: Field[] = [
 
 export default function LoginForm() {
     const {uid} = useContext(AuthContext);
-    useAuthRedirect({auth: '/'}, !!uid);
-    
     const {form, handleForgetPassword, onSubmit, isDisabled} = useLoginForm();
     
+    useAuthRedirect({auth: '/'}, !!uid);
+    
+
     return (
         <section className="flex h-screen items-center justify-center p-[20px]">
             <Card className="mx-auto max-w-xl w-full">

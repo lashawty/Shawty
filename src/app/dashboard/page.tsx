@@ -1,11 +1,12 @@
 'use client'
-import {useContext} from 'react';
+import {Suspense, useContext} from 'react';
 import {AuthContext} from '@/components/provider';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthRedirect } from '@/lib/hooks';
-import { cities } from '@/lib/city';
+import { City } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Dashboard() {
     const {displayName, phoneNumber, email, uid, address, city, zip} = useContext(AuthContext);
@@ -19,23 +20,26 @@ export default function Dashboard() {
             placeholder: "EMail",
         },
         {
-            value: city,
-            placeholder: "城市",
-        },
-        {
-            value: cities.find(row => row.name === city)?.districts.find(row => row.zip === zip)?.name,
-            placeholder: "地區",
-        },
-        {
-            value: address,
+            value: City.formatAddress({
+                cityCode: city,
+                zip,
+                address
+            }),
             placeholder: "地址",
         },
     ]
     
     useAuthRedirect({notAuth: '/'}, !!uid);
     
+    if(!uid) {
+        return <Skeleton className="flex-1" />
+    }
+
     return (
         <div className="grid gap-6">
+            <div className="mx-auto grid w-full max-w-6xl gap-2">
+                <h1 className="text-3xl font-semibold text-center">後臺設定</h1>
+            </div>
             <h2 className="text-2xl font-semibold">{`歡迎回來！ ${displayName}`}</h2>
 
             <Card x-chunk="dashboard-04-chunk-2">

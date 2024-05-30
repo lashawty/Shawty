@@ -75,7 +75,6 @@ export const useRegisterForm = () => {
                 title: "註冊成功",
                 desc: `${userCredential.user.email} 已註冊成功！`,
             })
-            router.push('/login');
         })
             .catch((error) => {
                 handleUpdateMessage({
@@ -84,6 +83,7 @@ export const useRegisterForm = () => {
                 })
             })
             .finally(() => {
+                router.push('/login')
                 setIsPending(false);
             })
     }

@@ -39,7 +39,7 @@ export type AuthInfo = {
     uid: string | null,
     email: string | null,
     photoUrl: string | null,
-    phoneNumber: string | null,
+    phoneNumber?: string | null,
     zip?: string,
     address?: string,
     city?: string,

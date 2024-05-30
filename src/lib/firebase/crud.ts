@@ -48,7 +48,7 @@ export async function getUserData (data: AuthInfo, onLogin: (info: AuthInfo) => 
         
         onLogin({
             ...data,
-            phoneNumber: docSnapData.phone,
+            phoneNumber: docSnapData.phoneNumber,
             zip: docSnapData.zip,
             address: docSnapData.address,
             city: docSnapData.city,
