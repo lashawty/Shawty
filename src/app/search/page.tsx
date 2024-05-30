@@ -22,7 +22,7 @@ export default function Result({
    searchParams,
 }: Props) {
     const {keyword, city} = searchParams;
-    const [list, setList] = useState<AuthInfo[]>([]);
+    const [list, setList] = useState<AuthInfo[] | undefined>(undefined);
 
     useEffect(() => {
         crud.getSearchData(city).then((row) => {
@@ -34,7 +34,7 @@ export default function Result({
         });
     }, [keyword, city])
     
-    const renderCards = list.map((row, i) => {
+    const renderCards = list && list.map((row, i) => {
         return (
             <Card key={i} className='p-5'>
 
@@ -64,11 +64,14 @@ export default function Result({
         )
     })
 
+    if(list?.length === 0) {
+        return <div>沒有資料哦</div>;
+    }
 
     return (
         <div className='p-5 grid grid-cols-1 gap-5 sm:grid-cols-2'>
             {
-                list.length === 0 ? <Skeleton className='w-full min-h-[500px]'/>: renderCards
+                !list ? <Skeleton className='w-full min-h-[500px]'/>: renderCards
             }
         </div>
     );
