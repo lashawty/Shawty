@@ -28,7 +28,7 @@ type Field = {
 
 export default function RegisterForm() {
     const {uid} = useContext(AuthContext);
-    const {form, onSubmit, isDisabled} = useRegisterForm();
+    const {form, onSubmit} = useRegisterForm();
     const districtOptions = City.getDistrictOptions(form.getValues("city"))
     const fields: Field[] = [
         {
@@ -142,7 +142,7 @@ export default function RegisterForm() {
                                     )
                                 })
                             }
-                            <Button disabled={isDisabled} type="submit">立馬註冊</Button>
+                            <Button type="submit">立馬註冊</Button>
                         </form>
                     </Form>
                     <div className="mt-4 text-center text-sm">
